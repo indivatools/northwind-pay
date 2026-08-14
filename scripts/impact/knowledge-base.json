@@ -1,0 +1,66 @@
+{
+  "portalBaseUrl": "https://errorsquad.qa.contextqa.com/td/cases",
+  "symbols": {
+    "REFUND_WINDOW_DAYS": {
+      "feature": "Refunds",
+      "workflows": [
+        "Issuing a refund from the transactions console",
+        "Communicating refund policy on the transactions list"
+      ],
+      "screens": ["Transactions List", "Transaction Detail", "Refund Panel"],
+      "summary": "Controls how many days after capture a payment remains refundable. Every eligibility decision and the customer-facing policy copy read from this constant."
+    },
+    "checkRefundEligibility": {
+      "feature": "Refunds",
+      "workflows": ["Issuing a refund from the transactions console"],
+      "screens": ["Transaction Detail", "Refund Panel"],
+      "summary": "Decides whether a captured payment can be refunded."
+    },
+    "checkPartialRefundAmount": {
+      "feature": "Refunds",
+      "workflows": ["Issuing a partial refund"],
+      "screens": ["Refund Panel"],
+      "summary": "Validates a requested partial refund amount against the remaining balance."
+    },
+    "parseAmountToCents": {
+      "feature": "Checkout",
+      "workflows": ["Completing a purchase"],
+      "screens": ["Checkout"],
+      "summary": "Parses user-entered amounts into integer cents."
+    }
+  },
+  "cases": [
+    {
+      "id": 25167,
+      "name": "Refund available 21 days after capture",
+      "exercises": ["REFUND_WINDOW_DAYS", "checkRefundEligibility"],
+      "routes": ["/ops/txn_0004"],
+      "assertsFixtureAgeDays": 21,
+      "assertion": "refund panel is available"
+    },
+    {
+      "id": 25166,
+      "name": "Refund available on the final day of the window",
+      "exercises": ["REFUND_WINDOW_DAYS", "checkRefundEligibility"],
+      "routes": ["/ops/txn_0006"],
+      "assertsFixtureAgeDays": 30,
+      "assertion": "refund panel is available"
+    },
+    {
+      "id": 25169,
+      "name": "Refund panel offers a partial amount field",
+      "exercises": ["checkPartialRefundAmount", "REFUND_WINDOW_DAYS"],
+      "routes": ["/ops/txn_0004"],
+      "assertsFixtureAgeDays": 21,
+      "assertion": "refund amount field is rendered"
+    },
+    {
+      "id": 25165,
+      "name": "Ops console lists captured transactions",
+      "exercises": ["REFUND_WINDOW_DAYS"],
+      "routes": ["/ops"],
+      "assertsFixtureAgeDays": null,
+      "assertion": "transactions table renders"
+    }
+  ]
+}
