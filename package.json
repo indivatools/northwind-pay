@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "seed": "node scripts/seed.mjs",
-    "demo:reset": "node scripts/seed.mjs"
+    "demo:reset": "node scripts/seed.mjs",
+    "demo:break-ui": "git apply docs/autoheal-break.patch && echo \"UI changed: button id, classes and position moved\"",
+    "demo:restore-ui": "git apply -R docs/autoheal-break.patch && echo \"UI restored\""
   },
   "dependencies": {
     "next": "16.3.1",

@@ -61,6 +61,38 @@
       "routes": ["/ops"],
       "assertsFixtureAgeDays": null,
       "assertion": "transactions table renders"
+    },
+    {
+      "id": 25184,
+      "name": "API - Refund allowed on the final day of the window",
+      "exercises": ["REFUND_WINDOW_DAYS", "checkRefundEligibility"],
+      "routes": ["POST /api/refunds"],
+      "assertsFixtureAgeDays": 30,
+      "assertion": "refund API returns 201"
+    },
+    {
+      "id": 25188,
+      "name": "Transactions page offers a refundable filter",
+      "exercises": ["checkRefundEligibility", "REFUND_WINDOW_DAYS"],
+      "routes": ["/ops"],
+      "assertsFixtureAgeDays": null,
+      "assertion": "refundable filter is rendered"
+    },
+    {
+      "id": 25185,
+      "name": "API - Captured payment is readable and refundable",
+      "exercises": ["checkRefundEligibility", "parseAmountToCents"],
+      "routes": ["POST /api/checkout", "GET /api/transactions/:id"],
+      "assertsFixtureAgeDays": 0,
+      "assertion": "a freshly captured payment reports refundable true"
+    },
+    {
+      "id": 25183,
+      "name": "API - Checkout rejects a malformed card number",
+      "exercises": ["parseAmountToCents"],
+      "routes": ["POST /api/checkout"],
+      "assertsFixtureAgeDays": null,
+      "assertion": "checkout API returns 400 with an exact error message"
     }
   ]
 }

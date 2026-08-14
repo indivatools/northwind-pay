@@ -159,7 +159,9 @@ function render(diff) {
     : symbolMeta.summary;
 
   const lines = [
-    "<!-- contextqa:impact-comment -->",
+    "<!-- contextqa:local-impact -->",
+    "> Generated locally by `scripts/impact/analyze.mjs` against a local case knowledge base.",
+    "",
     "",
     `### Test impact — ${affected.length} cases in the blast radius`,
     "",
