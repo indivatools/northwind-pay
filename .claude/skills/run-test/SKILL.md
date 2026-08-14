@@ -28,6 +28,15 @@ Never report pass/fail from `get_execution_status`. The only source of truth is
 
    Treat the terminal message as "finished", nothing more.
 
+   **Stop polling after 3 minutes.** If the run has not reached a terminal state
+   by then it is not slow, it is stuck — the platform accepted the run but never
+   executed it. Say so plainly, report the run id, and stop. Do not keep polling
+   and do not re-trigger the case; a second run queues behind the first.
+
+   When that happens, offer the read-only path instead: past results are still
+   readable with `get_test_step_results(result_id)`, so a previously captured run
+   can be shown rather than a new one executed.
+
 3. **Get the truth.** `get_test_step_results(result_id=<result_id>)`.
 
 4. **Report** a table, one row per step:
