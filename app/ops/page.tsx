@@ -1,20 +1,35 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { listTransactions } from "@/lib/store";
 import { checkRefundEligibility, REFUND_WINDOW_DAYS } from "@/lib/refund-rules";
 import { formatCents } from "@/lib/money";
+import RefundFilter from "./refund-filter";
 
 export const dynamic = "force-dynamic";
 
-export default function TransactionsPage() {
-  const transactions = listTransactions();
+export default async function TransactionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ refundable?: string }>;
+}) {
+  const { refundable } = await searchParams;
+  const onlyRefundable = refundable === "1";
+  const transactions = listTransactions().filter((transaction) =>
+    onlyRefundable ? checkRefundEligibility(transaction).eligible : true,
+  );
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Transactions</h1>
-        <p className="mt-1 text-sm text-slate-600">
-          Captured payments can be refunded within {REFUND_WINDOW_DAYS} days of capture.
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Transactions</h1>
+          <p className="mt-1 text-sm text-slate-600">
+            Captured payments can be refunded within {REFUND_WINDOW_DAYS} days of capture.
+          </p>
+        </div>
+        <Suspense fallback={null}>
+          <RefundFilter />
+        </Suspense>
       </div>
 
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
