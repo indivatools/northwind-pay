@@ -7,7 +7,7 @@ import type { Transaction } from "./types";
  * inclusive — a payment captured exactly REFUND_WINDOW_DAYS days ago is still
  * eligible. On the day after the window closes it is no longer refundable.
  */
-export const REFUND_WINDOW_DAYS = 30;
+export const REFUND_WINDOW_DAYS = 14;
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
